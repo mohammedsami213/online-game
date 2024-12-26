@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess the Number</title>
+    <style>
+        .main-page-button {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 10px 15px;
+    font-size: 1em;
+    color: white;
+    background-color: #333;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.main-page-button:hover {
+    background-color: #555;
+    transform: scale(1.1);
+}
+
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to bottom, #ff9a9e, #fad0c4);
+            color: #333;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        input, button {
+            padding: 10px;
+            font-size: 1.2em;
+            margin: 10px 0;
+        }
+
+        button {
+            background-color: #0072ff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+            transform: scale(1.1);
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 1.5em;
+            animation: fadeIn 1s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="main-page-button" onclick="goToMainPage()">Main Page</button>
+
+    <h1>Guess the Number</h1>
+    <p>Guess a number between 1 and 10!</p>
+    <input type="number" id="guess" placeholder="Enter your guess">
+    <button onclick="checkGuess()">Submit</button>
+    <p id="result"></p>
+    <script>
+        const randomNumber = Math.floor(Math.random() * 10) + 1;
+
+        function checkGuess() {
+            const userGuess = parseInt(document.getElementById('guess').value);
+            const result = document.getElementById('result');
+
+            result.style.animation = 'none'; // Reset animation
+            void result.offsetWidth; // Trigger reflow to restart animation
+            result.style.animation = 'fadeIn 1s';
+
+            if (userGuess === randomNumber) {
+                result.textContent = "🎉 Congratulations! You guessed it!";
+                result.style.color = 'green';
+            } else {
+                result.textContent = "❌ Try again!";
+                result.style.color = 'red';
+            }
+        }
+
+        // Add "Enter" key functionality
+        document.getElementById('guess').addEventListener('keydown', function (event) {
+            if (event.key === 'Enter') {
+                checkGuess();
+            }
+        });
+        function goToMainPage() {
+    window.location.href = "index.html"; // Replace "index.html" with your main page's file name
+}
+
+    </script>
+</body>
+</html>

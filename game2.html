@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic-Tac-Toe</title>
+    <style>
+        .main-page-button {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 10px 15px;
+    font-size: 1em;
+    color: white;
+    background-color: #333;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.main-page-button:hover {
+    background-color: #555;
+    transform: scale(1.1);
+}
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to bottom, #ffe259, #ffa751);
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-gap: 5px;
+            margin: 20px auto;
+        }
+
+        .cell {
+            width: 100px;
+            height: 100px;
+            background: #fff;
+            border: 2px solid #333;
+            text-align: center;
+            line-height: 100px;
+            font-size: 2em;
+            cursor: pointer;
+            transition: transform 0.3s, background-color 0.3s;
+        }
+
+        .cell:hover {
+            transform: scale(1.1);
+            background-color: #ffa751;
+        }
+
+        .cell.animated {
+            animation: pop 0.3s;
+        }
+
+        .winner {
+            font-size: 1.5em;
+            color: green;
+            margin-top: 20px;
+        }
+
+        .restart {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1em;
+            color: white;
+            background-color: #0072ff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .restart:hover {
+            background-color: #0056b3;
+            transform: scale(1.1);
+        }
+
+        @keyframes pop {
+            from {
+                transform: scale(0.8);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="main-page-button" onclick="goToMainPage()">Main Page</button>
+
+    <h1>Tic-Tac-Toe</h1>
+    <div class="board" id="board"></div>
+    <p class="winner" id="winner"></p>
+    <button class="restart" id="restart" onclick="restartGame()">Restart Game</button>
+
+    <script>
+        const board = document.getElementById('board');
+        const winnerDisplay = document.getElementById('winner');
+        const restartButton = document.getElementById('restart');
+        let cells = Array(9).fill(null);
+        let currentPlayer = 'X'; // Player 1 starts with 'X'
+        let gameActive = true;
+
+        const winningCombinations = [
+            [0, 1, 2], // Top row
+            [3, 4, 5], // Middle row
+            [6, 7, 8], // Bottom row
+            [0, 3, 6], // Left column
+            [1, 4, 7], // Middle column
+            [2, 5, 8], // Right column
+            [0, 4, 8], // Diagonal top-left to bottom-right
+            [2, 4, 6]  // Diagonal top-right to bottom-left
+        ];
+
+        function handleClick(index) {
+            if (cells[index] || !gameActive) return; // Ignore if cell is filled or game is over
+
+            cells[index] = currentPlayer;
+            render();
+            checkWinner();
+            currentPlayer = currentPlayer === 'X' ? 'O' : 'X'; // Switch player
+        }
+
+        function render() {
+            board.innerHTML = '';
+            cells.forEach((cell, index) => {
+                const div = document.createElement('div');
+                div.classList.add('cell');
+                div.textContent = cell;
+                if (cell) div.classList.add('animated');
+                div.onclick = () => handleClick(index);
+                board.appendChild(div);
+            });
+        }
+
+        function checkWinner() {
+            for (const combination of winningCombinations) {
+                const [a, b, c] = combination;
+                if (cells[a] && cells[a] === cells[b] && cells[a] === cells[c]) {
+                    const winner = cells[a] === 'X' ? 'Player 1' : 'Player 2';
+                    winnerDisplay.textContent = `🎉 ${winner} wins!`;
+                    gameActive = false;
+                    return;
+                }
+            }
+
+            if (!cells.includes(null)) {
+                winnerDisplay.textContent = "It's a tie! 🤝";
+                gameActive = false;
+            }
+        }
+
+        function restartGame() {
+            cells = Array(9).fill(null);
+            currentPlayer = 'X';
+            gameActive = true;
+            winnerDisplay.textContent = '';
+            render();
+        }
+
+        // Initial render
+        render();
+        function goToMainPage() {
+    window.location.href = "index.html"; // Replace "index.html" with your main page's file name
+}
+
+   </script>
+</body>
+</html>
